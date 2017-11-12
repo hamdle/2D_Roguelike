@@ -33,17 +33,15 @@ public class BoardManager : MonoBehaviour {
     private Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
 
-    void InitializeList()
+    public void SetupScene(int level)
     {
-        gridPositions.Clear();
-
-        for (int x = 1; x < columns - 1; x++)
-        {
-            for (int y = 1; y < rows - 1; y++)
-            {
-                gridPositions.Add(new Vector3(x, y, 0f));
-            }
-        }
+        BoardSetup();
+        InitializeList();
+        LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);
+        LayoutObjectAtRandom(foodTiles, foodCount.minimum, foodCount.maximum);
+        int enemyCount = (int)Math.Log(level, 2f);
+        LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);
+        Instantiate(exit, new Vector3(columns - 1, rows - 1, 0f), Quaternion.identity);
     }
 
     void BoardSetup()
@@ -67,6 +65,19 @@ public class BoardManager : MonoBehaviour {
         }
     }
 
+    void InitializeList()
+    {
+        gridPositions.Clear();
+
+        for (int x = 1; x < columns - 1; x++)
+        {
+            for (int y = 1; y < rows - 1; y++)
+            {
+                gridPositions.Add(new Vector3(x, y, 0f));
+            }
+        }
+    }
+
     Vector3 RandomPosition()
     {
         int randomIndex = Random.Range(0, gridPositions.Count);
@@ -85,16 +96,5 @@ public class BoardManager : MonoBehaviour {
             GameObject tileChoice = tileArray[Random.Range(0, tileArray.Length)];
             Instantiate(tileChoice, randomPosition, Quaternion.identity);
         }
-    }
-
-    public void SetupScene(int level)
-    {
-        BoardSetup();
-        InitializeList();
-        LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);
-        LayoutObjectAtRandom(foodTiles, foodCount.minimum, foodCount.maximum);
-        int enemyCount = (int)Math.Log(level, 2f);
-        LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);
-        Instantiate(exit, new Vector3(columns - 1, rows - 1, 0f), Quaternion.identity);
     }
 }
