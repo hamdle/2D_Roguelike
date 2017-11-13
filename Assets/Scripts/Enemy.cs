@@ -12,6 +12,9 @@ public class Enemy : MovingObject {
     // Cause the enemy to move every other turn
     private bool skipMove;
 
+    public AudioClip enemyAttack1;
+    public AudioClip enemyAttack2;
+
 	protected override void Start ()
     {
         GameManager.instance.AddEnemyToList(this);
@@ -53,6 +56,8 @@ public class Enemy : MovingObject {
         Player hitPlayer = component as Player;
 
         animator.SetTrigger("enemyAttack");
+
+        SoundManager.instance.RandomizeSfx(enemyAttack1, enemyAttack2);
 
         hitPlayer.LoseFood(playerDamage);
     }
